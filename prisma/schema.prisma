@@ -1,0 +1,53 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  email      String   @unique
+  bio        String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // 관계 정의
+  tweets     Tweet[]
+  likes      Like[]
+}
+
+model Tweet {
+  id         Int      @id @default(autoincrement()) 
+  tweet      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  // User와의 관계
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  
+  // Like와의 관계
+  likes      Like[]
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  
+  // User와의 관계
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  
+  // Tweet과의 관계
+  tweet      Tweet    @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  tweetId    Int
+
+  // 복합 고유 제약조건 (한 사용자가 같은 트윗에 여러번 좋아요를 누를 수 없음)
+  @@unique([userId, tweetId])
+}
