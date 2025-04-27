@@ -1,3 +1,7 @@
+//지난 섹션에서 생성한 같은 프로젝트를 활용하여 진행합니다:
+
+//Zod, 서버 액션, 미들웨어, 테일윈드, 프리즈마, iron-session 및 bcrypt를 사용하여 유저 인증을 구현합니다.
+
 // components/LoginForm.tsx
 "use client";
 
